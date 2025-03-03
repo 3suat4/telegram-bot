@@ -1,49 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Online Savaş Oyunu</title>
-  <script src="/socket.io/socket.io.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lord of Clicks</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+    button { font-size: 20px; padding: 10px 20px; }
+  </style>
 </head>
 <body>
-  <h1>Online Savaş Oyunu</h1>
-  <button id="startBattle">Savaşı Başlat</button>
-  <button id="joinBattle">Katıl</button>
-  <div id="status"></div>
+  <h1>Lord of Clicks</h1>
+  <p id="score">Puan: 0</p>
+  <button onclick="clickGame()">Tıkla!</button>
 
   <script>
-    const socket = io();
-
-    const startBattleBtn = document.getElementById('startBattle');
-    const joinBattleBtn = document.getElementById('joinBattle');
-    const statusDiv = document.getElementById('status');
-
-    // Savaş başlatma butonuna tıklanınca
-    startBattleBtn.addEventListener('click', () => {
-      socket.emit('startBattle');
-    });
-
-    // Katıl butonuna tıklanınca
-    joinBattleBtn.addEventListener('click', () => {
-      socket.emit('joinBattle');
-    });
-
-    // Sunucudan gelen mesajları göster
-    socket.on('message', (msg) => {
-      statusDiv.innerHTML += '<p>' + msg + '</p>';
-    });
-
-    // Savaş durumundaki güncellemeleri al
-    socket.on('battleStatus', (data) => {
-      if (data.status === 'waiting') {
-        statusDiv.innerHTML += '<p>Katılım penceresi açık. Son katılım: ' + new Date(data.joinDeadline).toLocaleTimeString() + '</p>';
-        statusDiv.innerHTML += '<p>Katılımcılar: ' + data.participants.join(', ') + '</p>';
-      } else if (data.status === 'started') {
-        statusDiv.innerHTML += '<p>Savaş başladı! Katılımcılar: ' + data.participants.join(', ') + '</p>';
-      } else if (data.status === 'ended') {
-        statusDiv.innerHTML += '<p>Savaş sona erdi. Bir sonraki savaşa katılabilirsiniz.</p>';
-      }
-    });
+    let score = 0;
+    function clickGame() {
+      score++;
+      document.getElementById('score').innerText = 'Puan: ' + score;
+    }
   </script>
 </body>
 </html>
